@@ -1,9 +1,9 @@
-CREATE DATABASE IF NOT EXISTS `database note`;
+CREATE DATABASE IF NOT EXISTS db_note;
 
-CREATE TABLE IF NOT EXISTS `database note`.`notes` ( 
-     `Last updated` TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
-     `Title` VARCHAR(20) NOT NULL ,
-     `Author` VARCHAR(20) NOT NULL ,
-     `Notes` TEXT NULL DEFAULT NULL , 
-     PRIMARY KEY (`Last updated` , `Titles`, `Author`)
+CREATE TABLE IF NOT EXISTS db_note.tb_note ( 
+     last_updated TIMESTAMP on update CURRENT_TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+     title VARCHAR(32) NOT NULL ,
+     author VARCHAR(32) NOT NULL ,
+     note TEXT NULL DEFAULT NULL , 
+     PRIMARY KEY (last_updated , title, author)
 ) 
