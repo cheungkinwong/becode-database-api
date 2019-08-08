@@ -7,5 +7,3 @@ CREATE TABLE IF NOT EXISTS `database_note`.`notes` (
      `Notes` TEXT NULL DEFAULT NULL , 
      PRIMARY KEY (`Titles`)
 ) 
-COLLATE='utf8_general_ci'
-ENGINE = InnoDB;
