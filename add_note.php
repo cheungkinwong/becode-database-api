@@ -14,7 +14,7 @@ function test_input($data) {
 }
 
 // validate
-$errors = [];
+$errors = [ ];
 if (empty($title)) {
     $errors['title'] = "title is required. <br />";
 } else if (!preg_match("/^([a-zA-Z' ]+)$/", $title)){
@@ -25,27 +25,26 @@ if (empty($author)) {
 } else if (!preg_match("/^([a-zA-Z' ]+)$/", $author)){
     $errors['author'] = "This author name is invalid. <br />";
 }
+if (empty($note)) {
+    $errors['note'] = "Note is required. <br />";
+}
 
 // execute
 if (count($errors)> 0){
     $errors['confirm'] = "There are still errors";
 } else {
-    create_note($title, $author, $note);
-}
-
-// insert
-function create_note($title, $author, $note){
-$sql  = "INSERT INTO db_note.tb_note (title, author, note)
+    $sql  = "INSERT INTO db_note.tb_note (title, author, note)
         VALUES ('$title', '$author', '$note');";
-      
-if ($conn->query($sql)) {
-    $errors['confirm'] = "Note created successfully <br>";
-} else {
-    $errors['confirm'] = "Error creating note: " .$conn->error."<br>";
+    if ($conn->query($sql)) {
+        $errors['confirm'] = "Note created successfully <br>";
+    } else {
+        $errors['confirm'] = "Error creating note: " .$conn->error."<br>";
+    }
 }
 
+$error_json = json_encode($errors);
 // status
-var_dump($errors);
-}
+echo $error_json;
+
 $conn->close();
 ?>
