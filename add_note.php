@@ -26,7 +26,15 @@ if (empty($author)) {
     $errors['author'] = "This author name is invalid. <br />";
 }
 
+// execute
+if (count($errors)> 0){
+    $errors['confirm'] = "There are still errors";
+} else {
+    create_note($title, $author, $note);
+}
+
 // insert
+function create_note($title, $author, $note){
 $sql  = "INSERT INTO db_note.tb_note (title, author, note)
         VALUES ('$title', '$author', '$note');";
       
@@ -38,6 +46,6 @@ if ($conn->query($sql)) {
 
 // status
 var_dump($errors);
-
+}
 $conn->close();
 ?>
