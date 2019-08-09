@@ -4,12 +4,13 @@ require 'config.php';
 // sanitize
 $title = test_input($_GET['title']);
 $author = test_input($_GET['author']);
-$note = test_input($_GET['note']);
+$note = test_input($_POST['note']);
 
 function test_input($data) {
     $data = trim($data);
     $data = stripslashes($data);
     $data = htmlspecialchars($data);
+    // $data = mysql_real_escape_string($data);
     return $data;
 }
 
@@ -34,7 +35,7 @@ if (count($errors)> 0){
     $errors['confirm'] = "There are still errors";
 } else {
     $sql  = "INSERT INTO db_note.tb_note (title, author, note)
-        VALUES ('$title', '$author', '$note');";
+            VALUES ('$title', '$author', '$note')";
     if ($conn->query($sql)) {
         $errors['confirm'] = "Note created successfully <br>";
     } else {
@@ -42,8 +43,8 @@ if (count($errors)> 0){
     }
 }
 
-$error_json = json_encode($errors);
 // status
+$error_json = json_encode($errors);
 echo $error_json;
 
 $conn->close();
