@@ -1,10 +1,8 @@
 <?php
 require 'config.php';
-$database = 'db_note.tb_note';
 
 $sql  = 'SELECT *  FROM db_note.tb_note';
-$statement = $conn->prepare($sql);   
-$statement->execute([$database]);
+$statement = $conn->query($sql);   
 
 $posts = $statement->fetchAll(PDO::FETCH_OBJ);
 $posts_json = json_encode($posts);
