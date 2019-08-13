@@ -33,15 +33,14 @@ if (empty($last_updated)) {
 if (count($errors)> 0){
     $errors['confirm'] = "There are still errors";
 } else {
-    $sql  = "DELETE FROM db_note.tb_note WHERE title = :title && author = :author && last_updated = :last_updated";
+    try {
+        $sql  = "DELETE FROM db_note.tb_note WHERE title = :title && author = :author && last_updated = :last_updated";
 
-    $statement = $conn->prepare($sql);     
-    $statement->execute([':title'=>$title , ':author'=>$author , ':last_updated'=>$last_updated])  ;
-
-    if ($statement) {
+        $statement = $conn->prepare($sql);     
+        $statement->execute([':title'=>$title , ':author'=>$author , ':last_updated'=>$last_updated])  ;
         $errors['confirm'] = "Note deleted successfully";
-    } else {
-        $errors['confirm'] = "Error deleting note: " .$conn->error;
+    } catch(PDOException $exception){
+        $errors['confirm'] = "Error deleting note: " . $exception->getMessage();
     }
 }
 

@@ -33,16 +33,15 @@ if (empty($note)) {
 if (count($errors)> 0){
     $errors['confirm'] = "There are still errors";
 } else {
-    $sql  = "INSERT INTO db_note.tb_note (title, author, note)
-            VALUES ( :title , :author , :note)";
-
-    $statement = $conn->prepare($sql);     
-    $statement->execute([':title'=>$title , ':author'=>$author , ':note'=>$note])  ;
-
-    if ($statement) {
+    try {
+        $sql  = "INSERT INTO db_note.tb_note (title, author, note)
+                VALUES ( :title , :author , :note)";
+    
+        $statement = $conn->prepare($sql);     
+        $statement->execute([':title'=>$title , ':author'=>$author , ':note'=>$note]);  
         $errors['confirm'] = "Note created successfully";
-    } else {
-        $errors['confirm'] = "Error creating note: " .$conn->error;
+    } catch(PDOException $exception){
+        $errors['confirm'] = "Error creating note: " . $exception->getMessage();
     }
 }
 

@@ -34,18 +34,17 @@ if (empty($last_updated)) {
 if (count($errors)> 0){
     $errors['confirm'] = "There are still errors";
 } else {
-    $sql  = "SELECT note FROM db_note.tb_note WHERE title = :title && author = :author && last_updated = :last_updated";
-
-    $statement = $conn->prepare($sql);     
-    $statement->execute([':title'=>$title , ':author'=>$author , ':last_updated'=>$last_updated]);
-    $posts = $statement->fetch(PDO::FETCH_OBJ);
-    $posts_json = json_encode($posts);
-    echo $posts_json;
-
-    if ($posts_json) {
+    try {
+        $sql  = "SELECT note FROM db_note.tb_note WHERE title = :title && author = :author && last_updated = :last_updated";
+    
+        $statement = $conn->prepare($sql);     
+        $statement->execute([':title'=>$title , ':author'=>$author , ':last_updated'=>$last_updated]);
+        $posts = $statement->fetch(PDO::FETCH_OBJ);
+        $posts_json = json_encode($posts);
+        echo $posts_json;
         $errors['confirm'] = "Notes listed successfully";
-    } else {
-        $errors['confirm'] = "Error listing notes: " .$conn->error;
+    } catch(PDOException $exception){
+        $errors['confirm'] = "Error listing note: " . $exception->getMessage();
     }
 }
 

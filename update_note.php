@@ -37,15 +37,14 @@ if (empty($note)) {
 if (count($errors)> 0){
     $errors['confirm'] = "There are still errors";
 } else {
-    $sql  = "UPDATE db_note.tb_note SET note = :note WHERE title = :title && author = :author && last_updated = :last_updated";
-
-    $statement = $conn->prepare($sql);     
-    $statement->execute([':note'=>$note , ':title'=>$title , ':author'=>$author , ':last_updated'=>$last_updated])  ;
-
-    if ($statement) {
+    try {
+        $sql  = "UPDATE db_note.tb_note SET note = :note WHERE title = :title && author = :author && last_updated = :last_updated";
+    
+        $statement = $conn->prepare($sql);     
+        $statement->execute([':note'=>$note , ':title'=>$title , ':author'=>$author , ':last_updated'=>$last_updated])  ;
         $errors['confirm'] = "Note updated successfully";
-    } else {
-        $errors['confirm'] = "Error updating note: " .$conn->error;
+    } catch(PDOException $exception){
+        $errors['confirm'] = "Error updating note: " . $exception->getMessage();
     }
 }
 
