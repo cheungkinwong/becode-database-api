@@ -1,4 +1,8 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
+header("Access-Control-Allow-Methods: GET,POST,PUT,DELETE");
+header("Access-Control-Allow-Headers: Content-Type,X-Requested-With,origin, Authorization");
 require 'config.php';
 
 // sanitize
@@ -15,41 +19,43 @@ function test_input($data) {
 }
 
 // validate
-$errors = [ ];
+$feedback = [];
+$feedback['connect']= $connect_feedback;
 if (empty($title)) {
-    $errors['title'] = "title is required.";
+    $feedback['errors'] ="title is required.";
 } else if (!preg_match("/^([a-zA-Z' ]+)$/", $title)){
-    $errors['title'] = "This title is invalid.";
+    $feedback['errors'] = "This title is invalid.";
 }
 if (empty($author)) {
-    $errors['author'] = "Author is required.";
+    $feedback['errors'] ="Author is required.";
 } else if (!preg_match("/^([a-zA-Z' ]+)$/", $author)){
-    $errors['author'] = "This author name is invalid. ";
+    $feedback['errors'] ="This author name is invalid.";
 }
 if (empty($last_updated)) {
-    $errors['last_updated'] = "last_updated is required.";
+    $feedback['errors'] ="last_updated is required.";
 }
 if (empty($note)) {
-    $errors['note'] = "Note is required.";
+    $feedback['notes']= $note;
+    $feedback['errors'] ="Note is required.";
 }
 
 // execute
-if (count($errors)> 0){
-    $errors['confirm'] = "There are still errors";
+if (count($feedback['errors'])> 0){
+    $feedback['confirm'] = "There are still feedback";
 } else {
     try {
         $sql  = "UPDATE db_note.tb_note SET note = :note WHERE title = :title && author = :author && last_updated = :last_updated";
     
         $statement = $conn->prepare($sql);     
         $statement->execute([':note'=>$note , ':title'=>$title , ':author'=>$author , ':last_updated'=>$last_updated])  ;
-        $errors['confirm'] = "Note updated successfully";
+        $feedback['confirm'] = "Note updated successfully";
     } catch(PDOException $exception){
-        $errors['confirm'] = "Error updating note: " . $exception->getMessage();
+        $feedback['confirm'] = "Error updating note: " . $exception->getMessage();
     }
 }
 
 // status
-$error_json = json_encode($errors);
+$error_json = json_encode($feedback);
 echo $error_json;
 
 $conn = null;

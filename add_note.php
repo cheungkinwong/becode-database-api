@@ -1,9 +1,13 @@
 <?php
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
+header("Access-Control-Allow-Methods: GET,POST,PUT,DELETE");
+header("Access-Control-Allow-Headers: Content-Type,X-Requested-With,origin, Authorization");
 require 'config.php';
 
 // sanitize
-$title = test_input($_GET['title']);
-$author = test_input($_GET['author']);
+$title = test_input($_POST['title']);
+$author = test_input($_POST['author']);
 $note = test_input($_POST['note']);
 
 function test_input($data) {
